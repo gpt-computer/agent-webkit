@@ -69,7 +69,7 @@ def sql(query):
     request = urllib.request.Request(
         f"https://api.supabase.com/v1/projects/{PROJECT}/database/query",
         data=json.dumps({"query": query}).encode(),
-        headers={"Authorization": "Bearer " + token(), "Content-Type": "application/json", "User-Agent": "search-ideas"},
+        headers={"Authorization": "Bearer " + token(), "Content-Type": "application/json", "User-Agent": "gptcomputer-ideas"},
     )
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
