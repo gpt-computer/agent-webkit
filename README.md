@@ -4,9 +4,9 @@ A small, fast, quiet web browser for the Mac, by [KhulnaSoft](https://khulnasoft
 
 ![GPT Computer, with its tabs down the left and a page taking the rest of the window](.github/screenshot.png)
 
-**[Download for macOS →](https://khulnasoft.com/search)** · macOS 14 or later · free · about 3 MB
+**[Download for macOS →](https://khulnasoft.com/gptcomputer)** · macOS 14 or later · free · about 3 MB
 
-Or with [Homebrew](https://brew.sh): `brew install --cask KhulnaSoft/tap/search`
+Or with [Homebrew](https://brew.sh): `brew install --cask KhulnaSoft/tap/gptcomputer`
 
 ---
 

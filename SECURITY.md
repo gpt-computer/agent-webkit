@@ -7,7 +7,7 @@ privately first.
 ## How to report
 
 Report it on GitHub: the repository's **Security** tab ›
-[**Report a vulnerability**](https://github.com/KhulnaSoft/GPT Computer/security/advisories/new).
+[**Report a vulnerability**](https://github.com/KhulnaSoft/GPT%20Computer/security/advisories/new).
 Only the maintainers see it. Or write to **hello@khulnasoft.com** with
 "security" in the subject. Either way, say what you found, where in the
 code, and how to see it happen. A proof of concept
