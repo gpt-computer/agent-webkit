@@ -1,12 +1,12 @@
 ---
-name: agent-webkit-bench
+name: gptcomputer-bench
 description: >
   Drive the GPT Computer macOS browser from the repo-root ./bench command: open
   flask-marked bench tabs, wait for load, read text, run JavaScript, click,
   type, submit, screenshot the page, probe window chrome, and install or
   press Chrome extensions. Use when the user asks to test GPT Computer, drive the
   browser, run ./bench, open a page in GPT Computer, screenshot a tab, check a
-  panel, or exercise an extension, and when they run /agent-webkit-bench.
+  panel, or exercise an extension, and when they run /gptcomputer-bench.
 metadata:
   short-description: Drive GPT Computer with ./bench
 ---

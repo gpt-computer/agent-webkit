@@ -1,0 +1,74 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 1.0.0)'
+        required: false
+
+env:
+  APP_NAME: GPT-Computer
+  BUNDLE_ID: com.khulnasoft.gptcomputer
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
+
+      - name: Build release
+        run: |
+          VERSION=${{ github.event.inputs.version || github.ref_name#v }}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          ./build.sh release dmg
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.APP_NAME }}-${{ env.VERSION }}
+          path: |
+            build/GPT Computer.dmg
+            build/GPT Computer.zip
+            build/appcast.json
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.APP_NAME }}-${{ env.VERSION }}
+          path: ./dist
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/GPT Computer.dmg
+            dist/GPT Computer.zip
+            dist/appcast.json
+          draft: false
+          prerelease: ${{ contains(github.ref, 'beta') || contains(github.ref, 'alpha') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  homebrew:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update tap
+        run: |
+          VERSION=${{ github.event.inputs.version || github.ref_name#v }}
+          SHA=$(shasum -a 256 ./dist/GPT\ Computer.dmg | cut -d' ' -f1)
+          echo "Version: $VERSION"
+          echo "SHA256: $SHA"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

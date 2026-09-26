@@ -1,27 +1,33 @@
 #!/bin/bash
-# Puts the three files the site serves into the site: the disk image for
-# people, the ZIP for the updater, and the appcast that names them both.
-#
-#   ./publish.sh "../KhulnaSoft Website/public/search"
-#
-# ./build.sh release ship makes them first (release dmg makes them too, but
-# unnotarised — fine for trying, not for anyone else's Mac). The names never
-# change, so the site's links never have to.
 set -euo pipefail
-
 cd "$(dirname "$0")"
-[ $# -eq 1 ] || { echo "usage: ./publish.sh <folder>" >&2; exit 1; }
-FOLDER="$1"
-FILES=(GPT Computer.dmg GPT Computer.zip appcast.json)
 
-for FILE in "${FILES[@]}"; do
-  [ -f "build/$FILE" ] || { echo "build/$FILE is missing — ./build.sh release dmg makes it" >&2; exit 1; }
-done
-xcrun stapler validate -q "build/GPT Computer.dmg" >/dev/null 2>&1 \
-  || echo "note: build/GPT Computer.dmg is not notarised — ./build.sh release ship does that" >&2
+VERSION="$(tr -d '[:space:]' < VERSION)"
+TAG="v$VERSION"
 
-mkdir -p "$FOLDER"
-for FILE in "${FILES[@]}"; do
-  cp "build/$FILE" "$FOLDER/$FILE"
-  echo "copied: build/$FILE → $FOLDER/$FILE"
-done
+echo "=== GPT Computer $VERSION ==="
+echo ""
+
+echo "1. Building release..."
+./build.sh release dmg
+
+echo ""
+echo "2. Validating DMG..."
+xcrun stapler validate -q "build/GPT Computer.dmg" 2>/dev/null \
+  || echo "  (not notarised — ./build.sh release ship does that)"
+
+echo ""
+echo "3. Creating GitHub release..."
+gh release create "$TAG" \
+  "build/GPT Computer.dmg" \
+  "build/GPT Computer.zip" \
+  "build/appcast.json" \
+  --title "$TAG" \
+  --notes "$(head -1 NOTES.md)" \
+  || echo "  Release $TAG already exists"
+
+echo ""
+echo "4. Done — GPT Computer $VERSION published"
+echo "   DMG:    build/GPT Computer.dmg"
+echo "   ZIP:    build/GPT Computer.zip"
+echo "   Notes:  NOTES.md (first paragraph → Settings)"
