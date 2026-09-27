@@ -25,7 +25,10 @@ jobs:
 
       - name: Build release
         run: |
-          VERSION=${{ github.event.inputs.version || github.ref_name#v }}
+          VERSION="${{ github.event.inputs.version }}"
+          if [ -z "$VERSION" ]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          fi
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           ./build.sh release dmg
 
@@ -66,7 +69,10 @@ jobs:
     steps:
       - name: Update tap
         run: |
-          VERSION=${{ github.event.inputs.version || github.ref_name#v }}
+          VERSION="${{ github.event.inputs.version }}"
+          if [ -z "$VERSION" ]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          fi
           SHA=$(shasum -a 256 ./dist/GPT\ Computer.dmg | cut -d' ' -f1)
           echo "Version: $VERSION"
           echo "SHA256: $SHA"
