@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "GPT Computer",
-    platforms: [.macOS(.v14)],
+    platforms: [.macOS(.v15_4)],
     targets: [
         .executableTarget(
             name: "GPT Computer",

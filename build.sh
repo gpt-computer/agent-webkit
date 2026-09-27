@@ -44,7 +44,7 @@ VERSION="$(tr -d '[:space:]' < VERSION)"
 BUILD="$(date +%Y%m%d%H%M)"
 # The oldest macOS this runs on — in the plist, and in the appcast so an
 # older Mac is not handed a build it can't open.
-MINIMUM="14.0"
+MINIMUM="15.4"
 
 swift build -c "$CONFIG"
 BINARY=".build/$CONFIG/GPT Computer"
